@@ -1,0 +1,20 @@
+{
+    "name": "listdevices",
+    "version": "0.0.1",
+    "description": "Sample program to display a list of device IDs and device names",
+    "private": true,
+    "scripts": {
+        "start": "node listdevices.js"
+    },
+    "author": "rickkas7@github.com",
+    "contributors": [
+    ],
+    "license": "Apache Version 2.0",
+    "dependencies": {
+        "particle-api-js": "^6.4.3",
+     	"nconf": "0.8.5"
+    },
+    "engines": {
+        "node": ">=4.3.2"
+    }
+}

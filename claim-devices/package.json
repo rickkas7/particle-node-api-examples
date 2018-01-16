@@ -1,0 +1,21 @@
+{
+    "name": "claim-devices",
+    "version": "0.0.1",
+    "description": "Sample program to claim devices in bulk",
+    "private": true,
+    "scripts": {
+        "start": "node claim-devices.js"
+    },
+    "author": "rickkas7@github.com",
+    "contributors": [
+    ],
+    "license": "Apache Version 2.0",
+    "dependencies": {
+        "particle-api-js": "^6.4.3",
+     	"nconf": "0.8.5",
+     	"yargs": "10.1.1"
+    },
+    "engines": {
+        "node": ">=4.3.2"
+    }
+}
