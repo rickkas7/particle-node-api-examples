@@ -6,7 +6,7 @@
 // You can generate one, or get it from the Settings tab at https://build.particle.io.
 // 
 // 3. Run the program:
-//	npm start
+//	node claim-devices.js <file_of_device_ids>
 //
 // You can also save the auth token in a file config.json that will be read at startup if present.
 const config = require('./config');

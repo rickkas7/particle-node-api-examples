@@ -6,7 +6,7 @@
 // You can generate one, or get it from the Settings tab at https://build.particle.io.
 // 
 // 3. Run the program:
-//	node product-activate-sims.js --productId=1234 sims.txt
+//	node set-sim-data-limit.js --productId=1234 --limit=5 sims.txt
 // 
 // You can also save the auth token in a file config.json that will be read at startup if present.
 const config = require('./config');
@@ -19,9 +19,9 @@ const argv = require('yargs')
 	.alias('p', 'productId')
 	.nargs('p', 1)
 	.describe('p', 'product ID to add to (required)')
-	.alias('c', 'country')
-	.nargs('c', 1)
-	.describe('c', 'country code, US if not specified')
+	.alias('l', 'limit')
+	.nargs('l', 1)
+	.describe('l', 'limit in MB (default: 5)')
 	.argv;
 
 //  	.demandOption(['p'])
@@ -32,16 +32,15 @@ var iccids = [];
 
 var productId = parseInt(argv.p);
 if (isNaN(productId)) {
-	console.log("--productId=NNN required");
-	return 1;	
+	productId = null;
 }
 console.log("productId=" + productId);
 
-var country = 'US';
-if (!!argv.c && argv.c != '') {
-	country = argv.c;
+var limit = parseInt(argv.l);
+if (isNaN(productId)) {
+	limit = 5;
 }
-console.log("country=" + country);
+console.log("limit=" + 5);
 
 if (argv._.length == 0) {
 	console.log("file of ICCIDs is required");
@@ -59,35 +58,33 @@ if (iccids.length == 0) {
 
 // You must set AUTH_TOKEN in an enviroment variable!
 
-// There may be a bug in the particle API js library, in the file Particle.js. The code reads:
-//
-//	var data = product ? { sims: iccids, countryCode: countryCode } : { countryCode: countryCode, promoCode: promoCode, action: 'activate' };
-//
-// However I always get 
-// { ok: false,  error: 'You must pass an ISO 3166-1 Alpha-2 country code to import SIM cards' }
-// 
-// Looking at the cloud API, the country should be in country, not countryCode
-// https://docs.particle.io/reference/api/#activate-sim
-//
-// Changing the line of code to:
-//
-// 			var data = product ? { sims: iccids, country: countryCode } : { countryCode: countryCode, promoCode: promoCode, action: 'activate' };
-//
-// results in successful execution. 
 
+var index = 0;
+setNextLimit();
 
-var req = { auth:config.get('AUTH_TOKEN'), iccids:iccids, countryCode:country, product:productId };
-
-console.log("request", req);
-
-particle.activateSIM(req).then(
-		function(data) {
-			console.log("added SIMs", data);
-		},
-		function(err) {
-			console.log("error adding SIMs", err);
+function setNextLimit() {
+	if (index < iccids.length) {
+		var req = { auth:config.get('AUTH_TOKEN'), iccid:iccids[index], mbLimit:limit };
+		
+		if (productId != null) {
+			req.product:productId;
 		}
-		);
+		index++;
+
+		console.log("request", req);
+		
+
+		particle.updateSIM(req).then(
+				function(data) {
+					console.log("updated SIMs", data);
+					setNextLimit();
+				},
+				function(err) {
+					console.log("error updating sim data limit", err);
+				}
+				);
+	}
+}
 
 function processFile(name) {
 	console.log(name);
