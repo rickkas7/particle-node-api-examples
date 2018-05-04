@@ -22,7 +22,11 @@ particle.listSIMs({ auth:config.get('AUTH_TOKEN') }).then(
 				// console.log("ii=", result.body.sims[ii]);
 				
 				var sim = result.body.sims[ii];
-				console.log(sim._id);
+				
+				// Comment the next line out if you want all SIMs, not just active SIMs.
+				if (sim.status == "active") {
+				    console.log(sim._id);
+				}
 			}			
 		},
 		function(err) {

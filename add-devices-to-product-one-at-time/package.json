@@ -1,0 +1,21 @@
+{
+    "name": "add-devices-to-product-one-at-time",
+    "version": "0.0.1",
+    "description": "Sample program to add devices on at a time instead of batch import (for illustration only)",
+    "private": true,
+    "scripts": {
+        "start": "node claim-devices.js"
+    },
+    "author": "rickkas7@github.com",
+    "contributors": [
+    ],
+    "license": "Apache Version 2.0",
+    "dependencies": {
+        "particle-api-js": "^6.4.3",
+     	"nconf": "0.8.5",
+     	"yargs": "10.1.1"
+    },
+    "engines": {
+        "node": ">=4.3.2"
+    }
+}
