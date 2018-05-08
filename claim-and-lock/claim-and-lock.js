@@ -73,33 +73,45 @@ function claimNext() {
 		return;
 	}
 	var deviceId = deviceIds.shift();
-	console.log("claiming " + deviceId + "...");
+
+	console.log("adding to product " + deviceId + "...");
 	
-	particle.claimDevice({ deviceId: deviceId, auth:config.get('AUTH_TOKEN') }).then(
-		function(data) {
-			console.log("  success!");
-			if (firmware) {
-				console.log("locking " + deviceId + " to " + firmware + "...");
-				particle.lockDeviceProductFirmware({deviceId: deviceId, auth:config.get('AUTH_TOKEN'), product:productId, desiredFirmwareVersion:firmware, flash:true}).then(
-						function(data) {
-							console.log("  success!");
-							claimNext();														
-						},
-						function(err) {
-							console.log("  failed " + deviceId, err);
-							claimNext();							
-						}
-						);
+	particle.addDeviceToProduct({ deviceId: deviceId, product:productId, auth:config.get('AUTH_TOKEN') }).then(
+			function(data) {
+				console.log("claiming " + deviceId + "...");
 				
+				particle.claimDevice({ deviceId: deviceId, auth:config.get('AUTH_TOKEN') }).then(
+					function(data) {
+						console.log("  success!");
+						if (firmware) {
+							console.log("locking " + deviceId + " to " + firmware + "...");
+							particle.lockDeviceProductFirmware({deviceId: deviceId, auth:config.get('AUTH_TOKEN'), product:productId, desiredFirmwareVersion:firmware, flash:true}).then(
+									function(data) {
+										console.log("  success!");
+										claimNext();														
+									},
+									function(err) {
+										console.log("  failed " + deviceId, err);
+										claimNext();							
+									}
+									);
+							
+						}
+						else {
+							claimNext();				
+						}
+					},
+					function(err) {
+						console.log("  failed " + deviceId, err);
+						claimNext();
+					}
+				);
+			},
+			function(err) {
+				console.log("  failed " + deviceId, err);
+				claimNext();
 			}
-			else {
-				claimNext();				
-			}
-		},
-		function(err) {
-			console.log("  failed " + deviceId, err);
-			claimNext();
-		}
-		);
+			);
+
 	
 } 

@@ -40,4 +40,10 @@ The productId is the number productId of the product it belongs to.
 
 The version is the firmware version to lock to.
 
+It will
+ 
+- Add the device to the product
+- Claim the device
+- Lock the firmware to the specified version
+
 There are additional tips in the README.md in the top level of particle-node-api-example as well.
