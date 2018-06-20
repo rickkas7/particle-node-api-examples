@@ -4,7 +4,6 @@
     "description": "Sample program to add devices on at a time instead of batch import (for illustration only)",
     "private": true,
     "scripts": {
-        "start": "node claim-devices.js"
     },
     "author": "rickkas7@github.com",
     "contributors": [
