@@ -67,7 +67,7 @@ function setNextLimit() {
 		var req = { auth:config.get('AUTH_TOKEN'), iccid:iccids[index], mbLimit:limit };
 		
 		if (productId != null) {
-			req.product:productId;
+			req.product = productId;
 		}
 		index++;
 
